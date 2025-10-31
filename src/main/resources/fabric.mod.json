@@ -1,37 +1,27 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "wordleaderboards",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "WordLeaderboards",
+	"description": "a server side mod to track words for DeezCord server!",
 	"authors": [
-		"Me!"
+		"Aguynamedkent"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Aguynamedkent7/shared-jukebox-mod"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "MIT",
+	"icon": "assets/sharedjukebox/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
-		],
-		"client": [
-			"com.example.ExampleModClient"
+			"com.aguynamedkent.sharedjukebox.SharedJukeboxMod"
 		]
 	},
-	"mixins": [
-		"modid.mixins.json",
-		{
-			"config": "modid.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
-		"fabricloader": ">=0.17.2",
-		"minecraft": "~1.21.10",
+		"fabricloader": ">=0.15.0",
+		"minecraft": ">=1.21",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
