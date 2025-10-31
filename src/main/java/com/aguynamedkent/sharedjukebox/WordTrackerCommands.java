@@ -27,7 +27,7 @@ public class WordTrackerCommands {
                         .executes(WordTrackerCommands::removeTrackedWord))
         );
 
-// Keep stats commands public too:
+        // Keep stats commands public too:
         dispatcher.register(literal("wordstats")
                 .requires(source -> source.hasPermissionLevel(0))
                 .then(argument("word", StringArgumentType.word())
@@ -36,8 +36,8 @@ public class WordTrackerCommands {
 
         dispatcher.register(literal("trackedwords")
                 .requires(source -> source.hasPermissionLevel(0))
-                .executes(WordTrackerCommands::showTrackedWords))
-);
+                .executes(WordTrackerCommands::showTrackedWords)  // REMOVED extra ); and fixed this line
+        );
 
         dispatcher.register(literal("wordprogress")
                 .requires(source -> source.hasPermissionLevel(0))
@@ -50,7 +50,7 @@ public class WordTrackerCommands {
         String word = StringArgumentType.getString(context, "word");
         ServerCommandSource source = context.getSource();
 
-        Map<UUID, Integer> stats = WordLeaderboards.wordTracker.getWordStats(word);
+        Map<UUID, Integer> stats = WordLeaderboards.wordTracker.getWordStats(word);  // FIXED: WordLeaderboards
 
         if (stats.isEmpty()) {
             source.sendMessage(Text.literal("❌ No stats for '" + word + "'").formatted(Formatting.RED));
@@ -79,7 +79,7 @@ public class WordTrackerCommands {
 
         source.sendMessage(Text.literal("📝 Tracked Funny Words:").formatted(Formatting.AQUA));
 
-        Set<String> words = WordLeaderboards.wordTracker.getTrackedWords();
+        Set<String> words = WordLeaderboards.wordTracker.getTrackedWords();  // FIXED: WordLeaderboards
         StringBuilder wordList = new StringBuilder();
         int count = 0;
 
@@ -91,6 +91,37 @@ public class WordTrackerCommands {
 
         source.sendMessage(Text.literal(wordList.toString()).formatted(Formatting.WHITE));
         source.sendMessage(Text.literal("Total: " + words.size() + " words").formatted(Formatting.GRAY));
+
+        return 1;
+    }
+
+    // ADD THESE MISSING METHODS:
+    private static int addTrackedWord(CommandContext<ServerCommandSource> context) {
+        String word = StringArgumentType.getString(context, "word");
+        ServerCommandSource source = context.getSource();
+
+        boolean added = WordLeaderboards.wordTracker.addTrackedWord(word);  // FIXED: WordLeaderboards
+
+        if (added) {
+            source.sendMessage(Text.literal("✅ Added '" + word + "' to tracked words!").formatted(Formatting.GREEN));
+        } else {
+            source.sendMessage(Text.literal("❌ '" + word + "' is already being tracked!").formatted(Formatting.RED));
+        }
+
+        return 1;
+    }
+
+    private static int removeTrackedWord(CommandContext<ServerCommandSource> context) {
+        String word = StringArgumentType.getString(context, "word");
+        ServerCommandSource source = context.getSource();
+
+        boolean removed = WordLeaderboards.wordTracker.removeTrackedWord(word);  // FIXED: WordLeaderboards
+
+        if (removed) {
+            source.sendMessage(Text.literal("✅ Removed '" + word + "' from tracked words!").formatted(Formatting.GREEN));
+        } else {
+            source.sendMessage(Text.literal("❌ '" + word + "' is not being tracked!").formatted(Formatting.RED));
+        }
 
         return 1;
     }
@@ -116,13 +147,12 @@ public class WordTrackerCommands {
         return rank;
     }
 
-
     private static int showWordProgress(CommandContext<ServerCommandSource> context) {
         String word = StringArgumentType.getString(context, "word");
         ServerCommandSource source = context.getSource();
         UUID playerId = source.getPlayer().getUuid();
 
-        String progress = WordLeaderboards.wordTracker.getPlayerMilestoneProgress(playerId, word);
+        String progress = WordLeaderboards.wordTracker.getPlayerMilestoneProgress(playerId, word);  // FIXED: WordLeaderboards
         source.sendMessage(Text.literal(progress).formatted(Formatting.AQUA));
 
         return 1;
